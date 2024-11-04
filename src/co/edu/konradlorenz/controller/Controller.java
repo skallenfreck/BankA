@@ -31,19 +31,19 @@ public class Controller {
 			}
 		}
 	}
-	
-	public void switchCliente(){
-		opcion= Vista.menuCliente();
-		while (opcion!=3) {
+
+	public void switchCliente() {
+		opcion = Vista.menuCliente();
+		while (opcion != 3) {
 			switch (opcion) {
 			case 1:
-				
+
 				break;
 			case 2:
-				
+
 				break;
 			case 3:
-				
+
 				break;
 
 			default:
@@ -61,23 +61,25 @@ public class Controller {
 				Integer.parseInt(Vista.pedirString("Por favor ingrese la identificacion del nuevo cliente")));
 
 		nuevoCliente.setCuentasCliente(new ArrayList<>());
-		opcion = Integer.parseInt(Vista.pedirString(
-				"¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
-		try {
-			if (opcion <= 2 && opcion >= 1) {
-				if (opcion == 1) {
-					Ahorro cuentaAhorro = new Ahorro();
-					cuentaAhorro.setBalance(0);
-					nuevoCliente.getCuentasCliente().add(cuentaAhorro);
-				} else {
-					Credito cuentaCredito = new Credito();
-					cuentaCredito.setBalance(0);
-					nuevoCliente.getCuentasCliente().add(cuentaCredito);
+		while (true) {
+			opcion = Integer.parseInt(Vista.pedirString(
+					"¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
+				if (opcion <= 2 && opcion >= 1) {
+					if (opcion == 1) {
+						Ahorro cuentaAhorro = new Ahorro();
+						cuentaAhorro.setBalance(0);
+						nuevoCliente.getCuentasCliente().add(cuentaAhorro);
+						break;
+					}else{
+						Credito cuentaCredito = new Credito();
+						cuentaCredito.setBalance(0);
+						nuevoCliente.getCuentasCliente().add(cuentaCredito);
+						break;
+						}
+				}else{
+					Vista.mostrarMensajer("Esa opcion no esta disponible, intenta de nuevo");	
 				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		}		
 		listaClientes.add(nuevoCliente);
 	}
 }
