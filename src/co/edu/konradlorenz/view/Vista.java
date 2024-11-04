@@ -3,21 +3,21 @@ package co.edu.konradlorenz.view;
 import java.util.Scanner;
 
 public class Vista {
-	Scanner sc = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
 
-	public int mostrarMenu() {
+	public static int mostrarMenu() {
 		System.out.println("--------Bienvenidos al menu principal--------\n"
 						 + "[1] Cliente\n"
 						 + "[2] Salir");
 		return sc.nextInt();
 	}
 
-	public String pedirString(String mensaje) {
+	public static String pedirString(String mensaje) {
 		System.out.println(mensaje);
 		return sc.nextLine();
 	}
 
-	public int menuCliente() {
+	public static int menuCliente() {
 		System.out.println("--------Bienvenido al menu de cliente--------\n"
 						 + "[1] Crear cliente\n"
 						 + "[2] Elegir cliente\n"
@@ -25,7 +25,7 @@ public class Vista {
 		return sc.nextInt();
 	}
 
-	public int menuCajero() {
+	public static int menuCajero() {
 		System.out.println("--------Bienvenidos al menu de cajero--------\n"
 						 + "[1] Depositar dinero\n"
 						 + "[2] Retirar Dinero\n"
@@ -34,5 +34,8 @@ public class Vista {
 						 + "[5] Salir");
 		return sc.nextInt();
 	}
-
+	
+	public static void mostrarMensajer(String mensaje) {
+		System.out.println(mensaje);
+	}
 }
