@@ -1,6 +1,7 @@
 package co.edu.konradlorenz.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import co.edu.konradlorenz.model.*;
 import co.edu.konradlorenz.view.Vista;
@@ -24,6 +25,7 @@ public class Controller {
 
 				break;
 			case 2:
+				Vista.mostrarMensajer("Finalizando servicio...");
 				opcion = 2;
 				break;
 			default:
@@ -37,13 +39,16 @@ public class Controller {
 		while (opcion != 3) {
 			switch (opcion) {
 			case 1:
-
+				crearCliente();
 				break;
 			case 2:
+				mostrarClientes();
+				elegirCliente();
 
 				break;
 			case 3:
-
+				Vista.mostrarMensajer("Cerrando menu cliente...");
+				opcion = 2;
 				break;
 
 			default:
@@ -64,22 +69,42 @@ public class Controller {
 		while (true) {
 			opcion = Integer.parseInt(Vista.pedirString(
 					"¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
-				if (opcion <= 2 && opcion >= 1) {
-					if (opcion == 1) {
-						Ahorro cuentaAhorro = new Ahorro();
-						cuentaAhorro.setBalance(0);
-						nuevoCliente.getCuentasCliente().add(cuentaAhorro);
-						break;
-					}else{
-						Credito cuentaCredito = new Credito();
-						cuentaCredito.setBalance(0);
-						nuevoCliente.getCuentasCliente().add(cuentaCredito);
-						break;
-						}
-				}else{
-					Vista.mostrarMensajer("Esa opcion no esta disponible, intenta de nuevo");	
+			if (opcion <= 2 && opcion >= 1) {
+				if (opcion == 1) {
+					Ahorro cuentaAhorro = new Ahorro();
+					cuentaAhorro.setBalance(0);
+					nuevoCliente.getCuentasCliente().add(cuentaAhorro);
+					break;
+				} else {
+					Credito cuentaCredito = new Credito();
+					cuentaCredito.setBalance(0);
+					nuevoCliente.getCuentasCliente().add(cuentaCredito);
+					break;
 				}
-		}		
+			} else {
+				Vista.mostrarMensajer("Esa opcion no esta disponible, intenta de nuevo");
+			}
+		}
 		listaClientes.add(nuevoCliente);
+	}
+
+	public void mostrarClientes() {
+		if (listaClientes.isEmpty()) {
+			Vista.mostrarMensajer("No hay ningun cliente registrado en banKA");
+		} else {
+			for (Cliente cliente : listaClientes) {
+				Vista.mostrarMensajer("La lista de clientes es:");
+				cliente.toString();
+				Vista.mostrarMensajer("\n");
+			}
+
+		}
+
+	}
+
+	public void elegirCliente() {
+		String nombreBusqueda = Vista.pedirString("¿Que cliente quieres elegir?");
+		for
+
 	}
 }

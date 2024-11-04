@@ -56,5 +56,7 @@ public class Cliente {
 		return "Clientes [nombre=" + nombre + ", direccion=" + direccion + ", identificacion=" + identificacion
 				+ ", cuentasCliente=" + cuentasCliente + "]";
 	}
+	
+	
 
 }
