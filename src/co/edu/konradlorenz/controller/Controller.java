@@ -1,7 +1,6 @@
 package co.edu.konradlorenz.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import co.edu.konradlorenz.model.*;
 import co.edu.konradlorenz.view.Vista;
@@ -27,7 +26,6 @@ public class Controller {
 				break;
 			case 2:
 				Vista.mostrarMensaje("Finalizando servicio...");
-				opcion = 2;
 				break;
 			default:
 				Vista.mostrarMensaje("Opción inválida.");
@@ -37,25 +35,25 @@ public class Controller {
 	}
 
 	public void switchCliente() {
-		opcion = Vista.menuCliente();
-		while (opcion != 3) {
+		int opcion;
+		do {
+			opcion = Vista.menuCliente();
 			switch (opcion) {
 			case 1:
 				crearCliente();
 				break;
 			case 2:
 				mostrarClientes();
-				elegirCliente();
 				break;
 			case 3:
-				Vista.mostrarMensaje("Cerrando menú cliente...");
-				opcion = 2;
+				System.exit(0);
 				break;
 			default:
 				Vista.mostrarMensaje("Opción inválida.");
 				break;
 			}
-		}
+		}while (opcion != 3);
+			
 	}
 
 	public void crearCliente() {
@@ -63,7 +61,14 @@ public class Controller {
 		Vista.mostrarMensaje("Bienvenido, vamos a registrar un nuevo cliente a banKA");
 		nuevoCliente.setNombre(Vista.pedirString("Por favor ingrese el nombre del nuevo cliente"));
 		nuevoCliente.setDireccion(Vista.pedirString("Por favor ingrese la direccion del nuevo cliente"));
-		nuevoCliente.setIdentificacion(Integer.parseInt(Vista.pedirString("Por favor ingrese la identificacion del nuevo cliente")));
+		
+		try {
+			nuevoCliente.setIdentificacion(Integer.parseInt(Vista.pedirString("Por favor ingrese la identificacion del nuevo cliente")));
+		}catch(NumberFormatException e) {
+			Vista.mostrarMensaje("La identificación ingresada no es un número válido. Intente de nuevo.");
+			return;
+		}
+		
 		nuevoCliente.setCuentasCliente(new ArrayList<>());
 		
 		while (true) {
@@ -91,27 +96,25 @@ public class Controller {
 	public void mostrarClientes() {
 		if (listaClientes.isEmpty()) {
 			Vista.mostrarMensaje("No hay ningun cliente registrado en banKA");
+			switchCliente();
 		} else {
 			Vista.mostrarMensaje("La lista de clientes es:");
 			for (Cliente cliente : listaClientes) {
 				Vista.mostrarMensaje(cliente.toString());
 			}
-
-		}
-
-	}
-
-	public void elegirCliente() {
-		String nombreBusqueda = Vista.pedirString("¿Que cliente quieres elegir?");
-		for(Cliente cliente : listaClientes) {
-			if(cliente.getNombre().equalsIgnoreCase(nombreBusqueda)) {
-				clienteSeleccionado = cliente;
-				Vista.mostrarMensaje("Cliente seleccionado: "+clienteSeleccionado.getNombre());
-				switchCajero();
-				return;
+			
+			String nombreBusqueda = Vista.pedirString("¿Que cliente quieres elegir?");
+			for(Cliente cliente : listaClientes) {
+				if(cliente.getNombre().equalsIgnoreCase(nombreBusqueda)) {
+					clienteSeleccionado = cliente;
+					Vista.mostrarMensaje("Cliente seleccionado: "+clienteSeleccionado.getNombre());
+					switchCajero();
+					return;
+				}
 			}
+			Vista.mostrarMensaje("Cliente no encontrado.");
 		}
-		Vista.mostrarMensaje("Cliente no encontrado.");
+
 	}
 	
 	public void switchCajero() {
@@ -131,7 +134,7 @@ public class Controller {
 				Vista.mostrarMensaje(clienteSeleccionado.verificarInteres());
 				break;
 			case 5:
-				Vista.mostrarMensaje("Saliendo del menú de cajero...");
+				System.exit(0);
 				break;
 			default:
 				Vista.mostrarMensaje("Opción inválida.");
