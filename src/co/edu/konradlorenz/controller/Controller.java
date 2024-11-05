@@ -160,9 +160,11 @@ public class Controller {
 					switch (opcion) {
 					case 1:
 						realizarDeposito();
+						switchCajero();
 						break;
 					case 2:
 						realizarRetiro();
+						switchCajero();
 						break;
 					case 3:
 						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
