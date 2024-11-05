@@ -115,14 +115,11 @@ public class Cliente implements Excepciones{
 					Ahorro cuentaAhorro = (Ahorro) cuenta;
 					mensaje = "Interés de la cuenta de ahorro: "+cuentaAhorro.calcularInteres();
 				}else if(cuenta instanceof Credito) {
-					Credito cuentaCredito = (Credito) cuenta;
-					mensaje = "Pago de interés mensual de la cuenta de créditp: "+cuentaCredito.;
-					
+					mensaje = "La cuenta de crédito no cuenta con interés";
 				}
 			}
 			return mensaje;
 		}
-		return "";
 	}
 	
 }

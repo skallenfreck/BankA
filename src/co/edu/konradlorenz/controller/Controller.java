@@ -94,8 +94,7 @@ public class Controller {
 		} else {
 			Vista.mostrarMensaje("La lista de clientes es:");
 			for (Cliente cliente : listaClientes) {
-				cliente.toString();
-				Vista.mostrarMensaje("\n");
+				Vista.mostrarMensaje(cliente.toString());
 			}
 
 		}
@@ -129,7 +128,7 @@ public class Controller {
 				Vista.mostrarMensaje(clienteSeleccionado.verificarTarjetas());
 				break;
 			case 4:
-				verificarInteres();
+				Vista.mostrarMensaje(clienteSeleccionado.verificarInteres());
 				break;
 			case 5:
 				Vista.mostrarMensaje("Saliendo del menú de cajero...");
@@ -168,11 +167,5 @@ public class Controller {
 			Vista.mostrarMensaje("Depósito finalizado.");
 		}
 	}
-	
-	private void verificarInteres() {
-		
-		
-	}
-
 	
 }
