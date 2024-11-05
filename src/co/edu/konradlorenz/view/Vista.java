@@ -35,7 +35,7 @@ public class Vista {
 		return sc.nextInt();
 	}
 	
-	public static void mostrarMensajer(String mensaje) {
+	public static void mostrarMensaje(String mensaje) {
 		System.out.println(mensaje);
 	}
 }
