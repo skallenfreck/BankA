@@ -104,8 +104,15 @@ public class Cliente implements Excepciones{
 			mensaje = "No hay tarjetas registradas para este cliente.";
 			return mensaje;
 		}else {
-			for(Tarjeta tarjeta : tarjetasCliente) {
-				return tarjeta.toString();
+			for(Cuenta cuenta : cuentasCliente) {
+				if(cuenta instanceof Credito) {
+					Credito cuentaCredito = (Credito) cuenta;
+					if(cuentaCredito.getListTarjetas() != null && !cuentaCredito.getListTarjetas().isEmpty()) {
+						for(Tarjeta tarjeta : cuentaCredito.getListTarjetas()) {
+							return tarjeta.toString();
+						}
+					}
+				}
 			}
 		}
 		return "";
