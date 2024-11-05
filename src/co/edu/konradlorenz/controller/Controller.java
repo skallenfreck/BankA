@@ -9,8 +9,6 @@ import co.edu.konradlorenz.view.Vista;
 
 public class Controller {
 	private Cliente clienteGlobal = new Cliente();
-	private Cuenta cuentaGlobal = new Cuenta();
-	private Tarjeta tarjetaGloTarjeta = new Tarjeta();
 	private ArrayList<Cliente> listaClientes = new ArrayList<>();
 	private int opcion = 0;
 
@@ -19,20 +17,28 @@ public class Controller {
 	}
 
 	public void switchPrincipal() {
-		opcion = Vista.mostrarMenu();
-		do {
-			switch (opcion) {
-			case 1:
-				switchCliente();
-				break;
-			case 2:
-				Vista.mostrarMensaje("Finalizando servicio...");
-				break;
-			default:
-				Vista.mostrarMensaje("Opción inválida.");
-				break;
+		while (true) {
+			try {
+				opcion = Vista.mostrarMenu();
+					switch (opcion) {
+					case 1:
+						switchCliente();
+						break;
+					case 2:
+						Vista.mostrarMensaje("Finalizando servicio...");
+						System.exit(0);
+						break;
+					default:
+						Vista.mostrarMensaje("Opción inválida.");
+						break;
+					}
+			} catch (InputMismatchException e) {
+				Vista.mostrarMensaje("Digite un valor numerico por favor");
+				Vista.limpiarScanner();
+			}finally {
+				Vista.mostrarMensaje("Proceso finalizado.");
 			}
-		} while (opcion != 2);
+		}		
 	}
 
 	public void switchCliente() {
@@ -98,7 +104,7 @@ public class Controller {
 						Credito cuentaCredito = new Credito();
 						cuentaCredito.setBalance(0);
 						Tarjeta tarjeta = new Tarjeta(numeroAleatorio, nuevoCliente.getNombre());
-
+						cuentaCredito.getListTarjetas().add(tarjeta);
 						nuevoCliente.getCuentasCliente().add(cuentaCredito);
 						break;
 					}
@@ -160,9 +166,11 @@ public class Controller {
 						break;
 					case 3:
 						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
+						switchCajero();
 						break;
 					case 4:
 						Vista.mostrarMensaje(clienteGlobal.verificarInteres());
+						switchCajero();
 						break;
 					case 5:
 						Vista.mostrarMensaje("Cerrando menú cajero...");
