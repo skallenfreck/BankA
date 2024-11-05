@@ -52,6 +52,14 @@ public class Cliente implements Excepciones{
 		this.cuentasCliente = cuentasCliente;
 	}
 
+	public ArrayList<Tarjeta> getTarjetasCliente() {
+		return tarjetasCliente;
+	}
+
+	public void setTarjetasCliente(ArrayList<Tarjeta> tarjetasCliente) {
+		this.tarjetasCliente = tarjetasCliente;
+	}
+
 	@Override
 	public String toString() {
 		return "Clientes [nombre=" + nombre + ", direccion=" + direccion + ", identificacion=" + identificacion

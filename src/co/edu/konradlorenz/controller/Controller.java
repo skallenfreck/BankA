@@ -2,6 +2,7 @@ package co.edu.konradlorenz.controller;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Random;
 
 import co.edu.konradlorenz.model.*;
 import co.edu.konradlorenz.view.Vista;
@@ -90,8 +91,12 @@ public class Controller {
 						nuevoCliente.getCuentasCliente().add(cuentaAhorro);
 						break;
 					} else {
+						Random random = new Random();
+						int numeroAleatorio = 100 + random.nextInt(900);
 						Credito cuentaCredito = new Credito();
 						cuentaCredito.setBalance(0);
+						Tarjeta tarjeta= new Tarjeta(numeroAleatorio, nuevoCliente.getNombre());
+						
 						nuevoCliente.getCuentasCliente().add(cuentaCredito);
 						break;
 					}
