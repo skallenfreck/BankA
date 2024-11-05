@@ -6,7 +6,6 @@ public class Cliente implements Excepciones{
 	private String nombre, direccion;
 	private int identificacion;
 	private ArrayList<Cuenta> cuentasCliente = new ArrayList<>();
-	private ArrayList<Tarjeta> tarjetasCliente = new ArrayList<>();
 
 	public Cliente() {
 
@@ -52,14 +51,6 @@ public class Cliente implements Excepciones{
 		this.cuentasCliente = cuentasCliente;
 	}
 
-	public ArrayList<Tarjeta> getTarjetasCliente() {
-		return tarjetasCliente;
-	}
-
-	public void setTarjetasCliente(ArrayList<Tarjeta> tarjetasCliente) {
-		this.tarjetasCliente = tarjetasCliente;
-	}
-
 	@Override
 	public String toString() {
 		return "Clientes [nombre=" + nombre + ", direccion=" + direccion + ", identificacion=" + identificacion
@@ -100,7 +91,7 @@ public class Cliente implements Excepciones{
 	@Override
 	public String verificarTarjetas() {
 		String mensaje = "";
-		if(tarjetasCliente.isEmpty()) {
+		if(cuentasCliente == null || cuentasCliente.isEmpty()) {
 			mensaje = "No hay tarjetas registradas para este cliente.";
 			return mensaje;
 		}else {
