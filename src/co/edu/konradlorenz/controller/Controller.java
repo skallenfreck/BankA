@@ -35,26 +35,31 @@ public class Controller {
 	}
 
 	public void switchCliente() {
-		int opcion;
-		do {
-			opcion = Vista.menuCliente();
-			switch (opcion) {
-			case 1:
-				crearCliente();
-				break;
-			case 2:
-				mostrarClientes();
-				break;
-			case 3:
-				Vista.mostrarMensaje("Cerrando menú cliente...");
-				switchPrincipal();
-				break;
-			default:
-				Vista.mostrarMensaje("Opción inválida.");
-				break;
+		while(true) {
+			try {
+				opcion = Vista.menuCliente();
+				switch (opcion) {
+					case 1:
+						crearCliente();
+						break;
+					case 2:
+						mostrarClientes();
+						break;
+					case 3:
+						Vista.mostrarMensaje("Cerrando menú cliente...");
+						switchPrincipal();
+						break;
+					default:
+						Vista.mostrarMensaje("Opción inválida.");
+						break;
+				}
+			}catch(InputMismatchException e) {
+				Vista.mostrarMensaje("Digite un valor numerico por favor");
+				Vista.limpiarScanner();
+			}finally {
+				Vista.mostrarMensaje("Proceso finalizado.");
 			}
-		} while (opcion != 3);
-
+		}
 	}
 
 	public void crearCliente() {
@@ -142,9 +147,11 @@ public class Controller {
 						break;
 					case 3:
 						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
+						switchCajero();
 						break;
 					case 4:
 						Vista.mostrarMensaje(clienteGlobal.verificarInteres());
+						switchCajero();
 						break;
 					case 5:
 						Vista.mostrarMensaje("Cerrando menú cajero...");
@@ -177,6 +184,7 @@ public class Controller {
 		} finally {
 			Vista.mostrarMensaje("Depósito finalizado.");
 		}
+		switchCajero();
 	}
 
 	public void realizarRetiro() {
@@ -191,6 +199,7 @@ public class Controller {
 		} finally {
 			Vista.mostrarMensaje("Retiro finalizado.");
 		}
+		switchCajero();
 	}
 
 }
