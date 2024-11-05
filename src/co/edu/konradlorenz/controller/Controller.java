@@ -36,28 +36,28 @@ public class Controller {
 	}
 
 	public void switchCliente() {
-		while(true) {
+		while (true) {
 			try {
 				opcion = Vista.menuCliente();
 				switch (opcion) {
-					case 1:
-						crearCliente();
-						break;
-					case 2:
-						mostrarClientes();
-						break;
-					case 3:
-						Vista.mostrarMensaje("Cerrando menú cliente...");
-						switchPrincipal();
-						break;
-					default:
-						Vista.mostrarMensaje("Opción inválida.");
-						break;
+				case 1:
+					crearCliente();
+					break;
+				case 2:
+					mostrarClientes();
+					break;
+				case 3:
+					Vista.mostrarMensaje("Cerrando menú cliente...");
+					switchPrincipal();
+					break;
+				default:
+					Vista.mostrarMensaje("Opción inválida.");
+					break;
 				}
-			}catch(InputMismatchException e) {
+			} catch (InputMismatchException e) {
 				Vista.mostrarMensaje("Digite un valor numerico por favor");
 				Vista.limpiarScanner();
-			}finally {
+			} finally {
 				Vista.mostrarMensaje("Proceso finalizado.");
 			}
 		}
@@ -75,7 +75,7 @@ public class Controller {
 		} catch (NumberFormatException e) {
 			Vista.mostrarMensaje("La identificación ingresada no es un número válido. Intente de nuevo.");
 			return;
-		}finally {
+		} finally {
 			Vista.mostrarMensaje("Acción finalizada.");
 		}
 
@@ -83,7 +83,9 @@ public class Controller {
 
 		while (true) {
 			try {
-				opcion = Integer.parseInt(Vista.pedirString("¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
+				opcion = Integer
+						.parseInt(Vista.pedirString("¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n"
+								+ "[1] Ahorros\n" + "[2] Creditos"));
 				if (opcion <= 2 && opcion >= 1) {
 					if (opcion == 1) {
 						Ahorro cuentaAhorro = new Ahorro();
@@ -95,8 +97,8 @@ public class Controller {
 						int numeroAleatorio = 100 + random.nextInt(900);
 						Credito cuentaCredito = new Credito();
 						cuentaCredito.setBalance(0);
-						Tarjeta tarjeta= new Tarjeta(numeroAleatorio, nuevoCliente.getNombre());
-						
+						Tarjeta tarjeta = new Tarjeta(numeroAleatorio, nuevoCliente.getNombre());
+
 						nuevoCliente.getCuentasCliente().add(cuentaCredito);
 						break;
 					}
@@ -141,6 +143,12 @@ public class Controller {
 	public void switchCajero() {
 		while (true) {
 			try {
+				if (clienteGlobal == null) {
+					Vista.mostrarMensaje("No hay cliente seleccionado.");
+					switchCliente();
+					return;
+				}
+
 				opcion = Vista.menuCajero();
 				while (opcion != 5) {
 					switch (opcion) {
@@ -152,11 +160,9 @@ public class Controller {
 						break;
 					case 3:
 						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
-						switchCajero();
 						break;
 					case 4:
 						Vista.mostrarMensaje(clienteGlobal.verificarInteres());
-						switchCajero();
 						break;
 					case 5:
 						Vista.mostrarMensaje("Cerrando menú cajero...");
@@ -168,10 +174,13 @@ public class Controller {
 						break;
 					}
 				}
+			} catch (NullPointerException e) {
+				Vista.mostrarMensaje("Error: el cliente no esta seleccionado.");
+				switchCliente();
 			} catch (InputMismatchException e) {
-				Vista.mostrarMensaje("Digite un valor numerico por favor");
+				Vista.mostrarMensaje("Digite un valor numérico, por favor.");
 				Vista.limpiarScanner();
-			}finally {
+			} finally {
 				Vista.mostrarMensaje("Proceso finalizado.");
 			}
 		}
@@ -179,9 +188,15 @@ public class Controller {
 
 	public void realizarDeposito() {
 		try {
+			if (clienteGlobal == null) {
+				throw new NullPointerException("Cliente no seleccionado.");
+			}
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a depositar: "));
 			clienteGlobal.depositarDinero(monto);
 			Vista.mostrarMensaje("Depósito realizado exitosamente.");
+		} catch (NullPointerException e) {
+			Vista.mostrarMensaje("Error: " + e.getMessage());
+			switchCliente();
 		} catch (ArithmeticException e) {
 			Vista.mostrarMensaje("Error en el depósito: " + e.getMessage());
 		} catch (NumberFormatException e) {
@@ -189,14 +204,19 @@ public class Controller {
 		} finally {
 			Vista.mostrarMensaje("Depósito finalizado.");
 		}
-		switchCajero();
 	}
 
 	public void realizarRetiro() {
 		try {
+			if (clienteGlobal == null) {
+				throw new NullPointerException("Cliente no seleccionado.");
+			}
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a retirar: "));
 			clienteGlobal.retirarDinero(monto);
-			Vista.mostrarMensaje("Retiro realizado ecitosamente.");
+			Vista.mostrarMensaje("Retiro realizado exitosamente.");
+		} catch (NullPointerException e) {
+			Vista.mostrarMensaje("Error: " + e.getMessage());
+			switchCliente();
 		} catch (ArithmeticException e) {
 			Vista.mostrarMensaje("Error en el retiro: " + e.getMessage());
 		} catch (NumberFormatException e) {
@@ -204,7 +224,6 @@ public class Controller {
 		} finally {
 			Vista.mostrarMensaje("Retiro finalizado.");
 		}
-		switchCajero();
 	}
 
 }
