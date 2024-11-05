@@ -160,11 +160,9 @@ public class Controller {
 					switch (opcion) {
 					case 1:
 						realizarDeposito();
-						switchCajero();
 						break;
 					case 2:
 						realizarRetiro();
-						switchCajero();
 						break;
 					case 3:
 						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
@@ -176,7 +174,7 @@ public class Controller {
 						break;
 					case 5:
 						Vista.mostrarMensaje("Cerrando menú cajero...");
-						switchCliente();
+						System.exit(0);
 						break;
 					default:
 						Vista.mostrarMensaje("Opción inválida.");
@@ -204,9 +202,9 @@ public class Controller {
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a depositar: "));
 			clienteGlobal.depositarDinero(monto);
 			Vista.mostrarMensaje("Depósito realizado exitosamente.");
+			switchCajero();
 		} catch (NullPointerException e) {
 			Vista.mostrarMensaje("Error: " + e.getMessage());
-			switchCliente();
 		} catch (ArithmeticException e) {
 			Vista.mostrarMensaje("Error en el depósito: " + e.getMessage());
 		} catch (NumberFormatException e) {
@@ -224,6 +222,7 @@ public class Controller {
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a retirar: "));
 			clienteGlobal.retirarDinero(monto);
 			Vista.mostrarMensaje("Retiro realizado exitosamente.");
+			switchCajero();
 		} catch (NullPointerException e) {
 			Vista.mostrarMensaje("Error: " + e.getMessage());
 			switchCliente();
