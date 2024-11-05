@@ -22,7 +22,9 @@ public class Vista {
 						 + "[1] Crear cliente\n"
 						 + "[2] Elegir cliente\n"
 						 + "[3] Salir");
-		return sc.nextInt();
+		int opcion =sc.nextInt();
+		sc.nextLine();
+		return opcion;
 	}
 
 	public static int menuCajero() {
@@ -32,10 +34,16 @@ public class Vista {
 						 + "[3] Verificar tarjetas\n"
 						 + "[4] Verificar pago interes mensual\n"
 						 + "[5] Salir");
-		return sc.nextInt();
+		int opcion=sc.nextInt();
+		sc.nextLine();
+		return opcion;
 	}
 	
 	public static void mostrarMensaje(String mensaje) {
 		System.out.println(mensaje);
+	}
+	
+	public static void limpiarScanner() {
+		sc.nextLine();
 	}
 }

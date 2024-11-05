@@ -1,6 +1,7 @@
 package co.edu.konradlorenz.controller;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import co.edu.konradlorenz.model.*;
 import co.edu.konradlorenz.view.Vista;
@@ -11,7 +12,6 @@ public class Controller {
 	private Tarjeta tarjetaGloTarjeta = new Tarjeta();
 	private ArrayList<Cliente> listaClientes = new ArrayList<>();
 	private int opcion = 0;
-	private Cliente clienteSeleccionado;
 
 	public void run() {
 		switchPrincipal();
@@ -19,7 +19,7 @@ public class Controller {
 
 	public void switchPrincipal() {
 		opcion = Vista.mostrarMenu();
-		while (opcion != 2) {
+		do {
 			switch (opcion) {
 			case 1:
 				switchCliente();
@@ -31,7 +31,7 @@ public class Controller {
 				Vista.mostrarMensaje("Opción inválida.");
 				break;
 			}
-		}
+		} while (opcion != 2);
 	}
 
 	public void switchCliente() {
@@ -46,14 +46,15 @@ public class Controller {
 				mostrarClientes();
 				break;
 			case 3:
-				System.exit(0);
+				Vista.mostrarMensaje("Cerrando menú cliente...");
+				switchPrincipal();
 				break;
 			default:
 				Vista.mostrarMensaje("Opción inválida.");
 				break;
 			}
-		}while (opcion != 3);
-			
+		} while (opcion != 3);
+
 	}
 
 	public void crearCliente() {
@@ -61,32 +62,41 @@ public class Controller {
 		Vista.mostrarMensaje("Bienvenido, vamos a registrar un nuevo cliente a banKA");
 		nuevoCliente.setNombre(Vista.pedirString("Por favor ingrese el nombre del nuevo cliente"));
 		nuevoCliente.setDireccion(Vista.pedirString("Por favor ingrese la direccion del nuevo cliente"));
-		
+
 		try {
-			nuevoCliente.setIdentificacion(Integer.parseInt(Vista.pedirString("Por favor ingrese la identificacion del nuevo cliente")));
-		}catch(NumberFormatException e) {
+			nuevoCliente.setIdentificacion(
+					Integer.parseInt(Vista.pedirString("Por favor ingrese la identificacion del nuevo cliente")));
+		} catch (NumberFormatException e) {
 			Vista.mostrarMensaje("La identificación ingresada no es un número válido. Intente de nuevo.");
 			return;
+		}finally {
+			Vista.mostrarMensaje("Acción finalizada.");
 		}
-		
+
 		nuevoCliente.setCuentasCliente(new ArrayList<>());
-		
+
 		while (true) {
-			opcion = Integer.parseInt(Vista.pedirString("¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
-			if (opcion <= 2 && opcion >= 1) {
-				if (opcion == 1) {
-					Ahorro cuentaAhorro = new Ahorro();
-					cuentaAhorro.setBalance(0);
-					nuevoCliente.getCuentasCliente().add(cuentaAhorro);
-					break;
+			try {
+				opcion = Integer.parseInt(Vista.pedirString("¿Cual tipo de cuenta desea asignar para el nuevo cliente?\n" + "[1] Ahorros\n" + "[2] Creditos"));
+				if (opcion <= 2 && opcion >= 1) {
+					if (opcion == 1) {
+						Ahorro cuentaAhorro = new Ahorro();
+						cuentaAhorro.setBalance(0);
+						nuevoCliente.getCuentasCliente().add(cuentaAhorro);
+						break;
+					} else {
+						Credito cuentaCredito = new Credito();
+						cuentaCredito.setBalance(0);
+						nuevoCliente.getCuentasCliente().add(cuentaCredito);
+						break;
+					}
 				} else {
-					Credito cuentaCredito = new Credito();
-					cuentaCredito.setBalance(0);
-					nuevoCliente.getCuentasCliente().add(cuentaCredito);
-					break;
+					Vista.mostrarMensaje("Esa opción no esta disponible, intenta de nuevo");
 				}
-			} else {
-				Vista.mostrarMensaje("Esa opcion no esta disponible, intenta de nuevo");
+			} catch (NumberFormatException e) {
+				Vista.mostrarMensaje("La cuenta elegida no es valida. Intente de nuevo.");
+			} finally {
+				Vista.mostrarMensaje("Acción finalizada.");
 			}
 		}
 		listaClientes.add(nuevoCliente);
@@ -102,12 +112,13 @@ public class Controller {
 			for (Cliente cliente : listaClientes) {
 				Vista.mostrarMensaje(cliente.toString());
 			}
-			
+
 			String nombreBusqueda = Vista.pedirString("¿Que cliente quieres elegir?");
-			for(Cliente cliente : listaClientes) {
-				if(cliente.getNombre().equalsIgnoreCase(nombreBusqueda)) {
-					clienteSeleccionado = cliente;
-					Vista.mostrarMensaje("Cliente seleccionado: "+clienteSeleccionado.getNombre());
+
+			for (Cliente cliente : listaClientes) {
+				if (cliente.getNombre().equalsIgnoreCase(nombreBusqueda)) {
+					clienteGlobal = cliente;
+					Vista.mostrarMensaje("Cliente seleccionado: " + clienteGlobal.getNombre());
 					switchCajero();
 					return;
 				}
@@ -116,29 +127,40 @@ public class Controller {
 		}
 
 	}
-	
+
 	public void switchCajero() {
-		opcion = Vista.menuCajero();
-		while (opcion != 5) {
-			switch (opcion) {
-			case 1:
-				realizarDeposito();
-				break;
-			case 2:
-				realizarRetiro();
-				break;
-			case 3:
-				Vista.mostrarMensaje(clienteSeleccionado.verificarTarjetas());
-				break;
-			case 4:
-				Vista.mostrarMensaje(clienteSeleccionado.verificarInteres());
-				break;
-			case 5:
-				System.exit(0);
-				break;
-			default:
-				Vista.mostrarMensaje("Opción inválida.");
-				break;
+		while (true) {
+			try {
+				opcion = Vista.menuCajero();
+				while (opcion != 5) {
+					switch (opcion) {
+					case 1:
+						realizarDeposito();
+						break;
+					case 2:
+						realizarRetiro();
+						break;
+					case 3:
+						Vista.mostrarMensaje(clienteGlobal.verificarTarjetas());
+						break;
+					case 4:
+						Vista.mostrarMensaje(clienteGlobal.verificarInteres());
+						break;
+					case 5:
+						Vista.mostrarMensaje("Cerrando menú cajero...");
+						switchCliente();
+						break;
+					default:
+						Vista.mostrarMensaje("Opción inválida.");
+						opcion = Vista.menuCajero();
+						break;
+					}
+				}
+			} catch (InputMismatchException e) {
+				Vista.mostrarMensaje("Digite un valor numerico por favor");
+				Vista.limpiarScanner();
+			}finally {
+				Vista.mostrarMensaje("Proceso finalizado.");
 			}
 		}
 	}
@@ -146,29 +168,29 @@ public class Controller {
 	public void realizarDeposito() {
 		try {
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a depositar: "));
-			clienteSeleccionado.depositarDinero(monto);
+			clienteGlobal.depositarDinero(monto);
 			Vista.mostrarMensaje("Depósito realizado exitosamente.");
-		}catch(ArithmeticException e) {
-			Vista.mostrarMensaje("Eror en el depósito: "+e.getMessage());
-		}catch(NumberFormatException e) {
+		} catch (ArithmeticException e) {
+			Vista.mostrarMensaje("Error en el depósito: " + e.getMessage());
+		} catch (NumberFormatException e) {
 			Vista.mostrarMensaje("Monto inválido, intente de nuevo.");
-		}finally {
+		} finally {
 			Vista.mostrarMensaje("Depósito finalizado.");
 		}
 	}
-	
+
 	public void realizarRetiro() {
 		try {
 			double monto = Double.parseDouble(Vista.pedirString("Ingrese el monto a retirar: "));
-			clienteSeleccionado.retirarDinero(monto);
+			clienteGlobal.retirarDinero(monto);
 			Vista.mostrarMensaje("Retiro realizado ecitosamente.");
-		}catch(ArithmeticException e) {
-			Vista.mostrarMensaje("Error en el retiro: "+e.getMessage());
-		}catch(NumberFormatException e) {
+		} catch (ArithmeticException e) {
+			Vista.mostrarMensaje("Error en el retiro: " + e.getMessage());
+		} catch (NumberFormatException e) {
 			Vista.mostrarMensaje("Monto inválido, intente de nuevo.");
-		}finally {
-			Vista.mostrarMensaje("Depósito finalizado.");
+		} finally {
+			Vista.mostrarMensaje("Retiro finalizado.");
 		}
 	}
-	
+
 }
